@@ -1,0 +1,31 @@
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    margin: 20px auto;
+}
+.form--item{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+#file{
+    display: none;
+}
+
+.uploader{
+    display: flex;
+    padding: 12px 12px;
+    flex-direction: row;
+    gap: 12px;
+    border: 1px dotted gray;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.uploader-icon{
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
