@@ -29,3 +29,6 @@ form{
     height: 24px;
     flex-shrink: 0;
 }
+.form-error{
+    color: red;
+}

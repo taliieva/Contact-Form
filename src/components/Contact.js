@@ -1,21 +1,41 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import "../components/Contact.css";
-import { useState } from "react";
 import { useEffect } from "react";
-import { Phone } from "./Phone";
-import { Fullname } from "./Fullname";
+import { Phone } from "./PersonalInfoSection/Phone";
+import { Fullname } from "./PersonalInfoSection/Fullname";
 import { PersonalInfoSection } from "./PersonalInfoSection";
 import { createContext } from "react";
-import {ContactContext} from "./hooks"
+import { DetailSection } from "./DetailSection";
+import { FormProvider, useForm } from "react-hook-form";
+//import {ContactContext} from "./hooks"
+import { DevTool } from "@hookform/devtools";
 
+export function Contact() {
+  const fetchInitialData = async()=>{
+    const res = await fetch("http://localhost:3001/");
+    const data = await res.json();
+    return data;
+  };
 
-export default function Contact() {
-  ///const [file, setFile] = useState();
-  const [fullName, setFullName] = useState({
+  React.useEffect(()=>{
+    async function fetchData(){
+      const data = await fetchInitialData();
+      console.log(data);
+    }
+    fetchData();
+  }, []);
+
+  const methods = useForm({
+    mode: "all",
+    defaultValues: fetchInitialData,
+  });
+
+  //const [file, setFile] = useState();
+  /*const [fullName, setFullName] = useState({
     value: "",
     error:null,
     
-  });
+  }); 
   const [phone, setPhone] = useState("");
   //const data = useRef(null);
   //const fileRef = useRef();
@@ -23,20 +43,12 @@ export default function Contact() {
   //const phoneRef = useRef(null);
 
   //console.log("contact");
-
-  const formHandler = (e) => {
-    //const form = new FormData(e.target);
-
-    e.preventDefault();
-    console.log(fullName,phone);
-    /*console.log(fullnameRef.current.value);
-    console.log(fileRef.current.files[0]);
 */
-    /* for(const[key,value] of form){
-            console.log(`${key}: ${value}\n`);
-        }*/
-  };
-/*
+  const formHandler = methods.handleSubmit((values) => {
+      console.log(values);
+      console.log(methods.formState.errors);
+  });
+  /*
   const uploaderClickHandler = () => {
     fileRef.current.click();
   };
@@ -47,20 +59,20 @@ export default function Contact() {
 */
 
   return (
-    <ContactContext.Provider value={{
+    /*<ContactContext.Provider
+     value={{
         fullName,
         setFullName,
         phone,
         setPhone,
-    }}>
-
+    }}>*/
+    <FormProvider {...methods}>
       <h1>Contact Form</h1>
       <form onSubmit={formHandler}>
-        
-        <PersonalInfoSection
-        />
+        <PersonalInfoSection />
+        <DetailSection />
 
-     {/*  <div className="form--item">
+        {/*  <div className="form--item">
           <label htmlFor="file">File</label>
           <div className="uploader" onClick={uploaderClickHandler}>
             <svg
@@ -86,24 +98,10 @@ export default function Contact() {
             accept=".png,.jpg"
           />
   </div>*/}
-
-        
-
-        <div className="form--item">
-          <label htmlFor="priority">Priority</label>
-          <select name="priority" id="priority">
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-          </select>
-        </div>
-
-        <div className="form--item">
-          <label htmlFor="message">Text</label>
-          <textarea name="message" id="message" cols="30" rows="10"></textarea>
-        </div>
         <input value="Submit" type="submit" />
       </form>
-    </ContactContext.Provider>
+      <DevTool control={methods.control} />
+    </FormProvider>
+    // </ContactContext.Provider>
   );
 }
